@@ -40,7 +40,7 @@ public class Graph {
             for (int j = i + 1; j < nodeList.size(); j++) {
                 Node to = nodeList.get(j);
                 if (!areConnectedByZeroCostEdge(from, to)) {
-                    double distance = calculateDistance(from, to);
+                   double distance = distanceAlongLatitude(from, to);
                     addEdge(from, to, distance);
                     addEdge(to, from, distance);
                 }
@@ -60,10 +60,15 @@ public class Graph {
         return false;
     }
 
-    private double calculateDistance(Node a, Node b) {
-        double dx = a.getLatitude() - b.getLongitude();
-        double dy = a.getLatitude() - b.getLongitude();
-        return Math.sqrt(dx * dx + dy * dy);
+    // Function to calculate distance along a parallel of latitude
+    public double distanceAlongLatitude(Node from, Node to) {
+        double earthRadius = 6371;
+        // Convert latitude and longitude differences to radians
+        double latRad = Math.toRadians(from.getLatitude());
+        double deltaLonRad = Math.toRadians(Math.abs(to.getLongitude() - from.getLongitude()));
+
+        // Calculate the distance
+        return earthRadius * Math.cos(latRad) * deltaLonRad;
     }
 
     private Set<Node> getAllNodes() {
