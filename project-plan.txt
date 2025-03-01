@@ -13,6 +13,8 @@
      on their geographic distance. Skip adding new edge if its already included as a zero-cost edge from
      an empty pipelines.
 
+
+
 4. Compute the minimal connection network
    - objective: Find set of connections that links all nodes into one network with the lowest total cost.
    - action: Substep 3.1: Gather all edges from the graph (both zero-cost edges from under-construction pipelines and distance-based edges for new connections).
