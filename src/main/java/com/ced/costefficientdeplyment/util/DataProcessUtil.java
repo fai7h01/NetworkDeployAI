@@ -23,7 +23,7 @@ public class DataProcessUtil {
     private static final String PIPELINES_PATH = "C:\\Users\\user\\Desktop\\cost-efficient-deplyment\\src\\main\\resources\\TELCO_FIBRAPIU_CANALITZA_V.csv";
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(DataProcessUtil.class);
 
-    public static List<Pipeline> processEmptyPipelineDataset() {
+    public List<Pipeline> processEmptyPipelineDataset() {
 
         List<Pipeline> pipelines = Collections.synchronizedList(new ArrayList<>());
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
