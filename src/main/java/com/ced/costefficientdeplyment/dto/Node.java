@@ -1,7 +1,5 @@
 package com.ced.costefficientdeplyment.dto;
 
-import lombok.*;
-
 import java.util.Objects;
 
 public class Node {
