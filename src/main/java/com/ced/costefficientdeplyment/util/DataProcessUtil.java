@@ -1,13 +1,12 @@
-package com.ced.costefficientdeplyment.service.impl;
+package com.ced.costefficientdeplyment.util;
 
 import com.ced.costefficientdeplyment.dto.Node;
 import com.ced.costefficientdeplyment.dto.Pipeline;
-import com.ced.costefficientdeplyment.service.DataLoadingService;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,19 +14,18 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Service
-public class DataProcessServiceImpl implements DataLoadingService {
+@Component
+public class DataProcessUtil {
 
     private static final String EMPTY_PIPELINES_PATH = "C:\\Users\\user\\Desktop\\cost-efficient-deplyment\\src\\main\\resources\\Canalitzacions_de_xarxes_de_telecomunicacions_de_la_Generalitat_20250228.csv";
     private static final String PIPELINES_PATH = "C:\\Users\\user\\Desktop\\cost-efficient-deplyment\\src\\main\\resources\\TELCO_FIBRAPIU_CANALITZA_V.csv";
-    private static final Logger log = LoggerFactory.getLogger(DataProcessServiceImpl.class);
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(DataProcessUtil.class);
 
-
-    @Override
-    public void processEmptyPipelineDataset() {
+    public static List<Pipeline> processEmptyPipelineDataset() {
 
         List<Pipeline> pipelines = Collections.synchronizedList(new ArrayList<>());
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
@@ -44,8 +42,9 @@ public class DataProcessServiceImpl implements DataLoadingService {
                 tasks.add(() -> {
                     Set<Node> nodes = new HashSet<>();
                     String multilineString = row[0];
+                    String totalLength = row[5];
+                    log.info("Pipeline total length: {}", totalLength);
                     System.out.println("Multiline string: " + multilineString);
-                    // Extract coordinates using regex
                     Pattern pattern = Pattern.compile("\\(\\((.*?)\\)\\)");
                     Matcher matcher = pattern.matcher(multilineString);
 
@@ -60,29 +59,26 @@ public class DataProcessServiceImpl implements DataLoadingService {
                             nodes.add(new Node(latitude, longitude));
                         }
                     }
-                    // Create a new pipeline and set its nodes
-                    Pipeline pipeline = new Pipeline(new ArrayList<>(nodes), false);
+
+                    Pipeline pipeline = new Pipeline(new ArrayList<>(nodes), Integer.parseInt(totalLength.trim()), false);
                     pipelines.add(pipeline);
 
                     return null;
                 });
             }
 
-            // Execute tasks in parallel
-            executorService.invokeAll(tasks);  // Blocks until all tasks are finished
+            executorService.invokeAll(tasks);
 
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            log.error("Error occurred while parsing file: {}", e.getMessage());
         } catch (CsvValidationException e) {
             throw new RuntimeException(e);
         } finally {
-            executorService.shutdown();  //shut down the executor
+            executorService.shutdown();
         }
 
-        // check results
         System.out.println(pipelines);
-
+        return pipelines;
     }
-
 
 }

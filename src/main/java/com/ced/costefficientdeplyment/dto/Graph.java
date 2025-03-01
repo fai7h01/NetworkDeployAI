@@ -4,8 +4,6 @@ import lombok.*;
 
 import java.util.*;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Graph {
@@ -19,7 +17,7 @@ public class Graph {
 
     }
 
-    private void buildAdjacencyList() {
+    public void buildAdjacencyList() {
         // Add zero-cost edges for under-construction pipelines
         for (Pipeline pipeline : pipelines) {
             if (pipeline.isUnderConstruction()) {
@@ -28,7 +26,7 @@ public class Graph {
                     Node from = nodes.get(i);
                     Node to = nodes.get(i + 1);
                     addEdge(from, to, 0.0);
-                    addEdge(to, from, 0.0); // Undirected
+                    addEdge(to, from, 0.0);
                 }
             }
         }
