@@ -2,11 +2,13 @@ package com.ced.costefficientdeplyment.util;
 
 import com.ced.costefficientdeplyment.dto.Node;
 import com.ced.costefficientdeplyment.dto.Pipeline;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -31,8 +33,10 @@ public class DataProcessUtil {
         try (CSVReader reader = new CSVReader(new FileReader(EMPTY_PIPELINES_PATH))) {
             String[] nextLine;
             List<String[]> rows = new ArrayList<>();
-            while ((nextLine = reader.readNext()) != null ) {
+            int lineCounter = 0;
+            while ((nextLine = reader.readNext()) != null && lineCounter < 100) {
                 rows.add(nextLine);
+                lineCounter++;
             }
 
             List<Callable<Void>> tasks = new ArrayList<>();
@@ -41,8 +45,6 @@ public class DataProcessUtil {
                     Set<Node> nodes = new HashSet<>();
                     String multilineString = row[0];
                     String totalLength = row[5];
-                    log.info("Pipeline total length: {}", totalLength);
-                    System.out.println("Multiline string: " + multilineString);
                     Pattern pattern = Pattern.compile("\\(\\((.*?)\\)\\)");
                     Matcher matcher = pattern.matcher(multilineString);
 
@@ -74,9 +76,12 @@ public class DataProcessUtil {
         } finally {
             executorService.shutdown();
         }
-
-        System.out.println(pipelines);
         return pipelines;
+    }
+
+    public void savePipelinesAsJson(List<Pipeline> pipelines) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.writeValue(new File("pipelines.json"), pipelines);
     }
 
 }
