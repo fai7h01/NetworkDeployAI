@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: ai-assistant
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-4o
+        enabled: true
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: faith
+
+server:
+  port: 9091
