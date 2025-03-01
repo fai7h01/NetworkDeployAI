@@ -1,0 +1,80 @@
+# Ignore Maven build output
+/target/
+*/target/
+
+# Ignore IDE-specific files
+.idea/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+.vscode/
+*.swp
+*.swo
+
+# Ignore Eclipse files
+.metadata/
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
+
+# Ignore IntelliJ files
+out/
+*.log
+*.aux
+*.toc
+
+# Ignore NetBeans files
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# Ignore logs and temporary files
+*.log
+*.patch
+*.diff
+*.orig
+*.rej
+*.class
+*.jar
+*.war
+*.ear
+*.db
+*.sql
+*.h2.db
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore environment-specific files
+.env
+*.env
+
+# Ignore dependency files (if not using a package manager)
+**/dependencies/
+**/lib/
+**/libs/
+
+# Ignore Maven wrapper files (if not using Maven Wrapper)
+.mvn/
+mvnw
+mvnw.cmd
+
+# Ignore test output
+**/test-output/
+**/test-results/
+
+# Ignore other generated files
+**/generated-sources/
+**/generated-test-sources/
