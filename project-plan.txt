@@ -1,0 +1,23 @@
+1. Parse dataset and store it in structures;
+
+2. Define pipeline type
+   - objective: clearly differentiate between pipelines that are already built or in process,
+     and those are free for deployment.
+   - action:
+
+3. Construct a graph representation
+   - objective: Create a graph that capture both existing and potential new connections.
+     - For pipelines marked as under construction, include their existing connections as edges
+     with zero cost. Add an edge between each pair of consecutive nodes in pipelines.
+     - For all pairs of nodes (across all pipeline), calculate potential new connections and assign costs based
+     on their geographic distance. Skip adding new edge if its already included as a zero-cost edge from
+     an empty pipelines.
+
+4. Compute the minimal connection network
+   - objective: Find set of connections that links all nodes into one network with the lowest total cost.
+   - action: Substep 3.1: Gather all edges from the graph (both zero-cost edges from under-construction pipelines and distance-based edges for new connections).
+             Substep 3.2: Sort all edges by their cost, from lowest to highest (zero-cost edges will naturally come first).
+             Substep 3.3: Apply a method to select the minimal set of edges that connects all nodes without forming loops.
+
+                 Start with each node as its own group.
+                 Add edges in order of increasing cost, connecting groups only if they aren’t already linked.
