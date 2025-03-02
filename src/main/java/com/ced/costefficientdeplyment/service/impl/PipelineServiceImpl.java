@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -45,6 +46,7 @@ public class PipelineServiceImpl implements PipelineService {
                     Pipeline saved = pipelineRepository.save(entity);
                     return mapperUtil.convert(saved, new PipelineDTO());
                 })
+                .sorted(Comparator.comparing(PipelineDTO::getId))
                 .toList();
     }
 

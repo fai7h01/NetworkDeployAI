@@ -69,6 +69,7 @@ public class DataProcessUtil {
                         }
                     }
 
+                    nodeDTOS.sort(Comparator.comparing(NodeDTO::getLatitude));
                     PipelineDTO pipelineDTO = new PipelineDTO(new ArrayList<>(nodeDTOS), Integer.parseInt(totalLength.trim()), underConstruct);
                     map.putIfAbsent(pipelineDTO, nodeDTOS);
 
