@@ -20,21 +20,20 @@ import java.util.regex.Pattern;
 @Component
 public class DataProcessUtil {
 
-    private static final String EMPTY_PIPELINES_PATH = "C:\\Users\\user\\Desktop\\cost-efficient-deplyment\\src\\main\\resources\\Canalitzacions_de_xarxes_de_telecomunicacions_de_la_Generalitat_20250228.csv";
-    private static final String PIPELINES_PATH = "C:\\Users\\user\\Desktop\\cost-efficient-deplyment\\src\\main\\resources\\TELCO_FIBRAPIU_CANALITZA_V.csv";
+//    private static final String EMPTY_PIPELINES_PATH = "C:\\Users\\user\\Desktop\\cost-efficient-deplyment\\src\\main\\resources\\Canalitzacions_de_xarxes_de_telecomunicacions_de_la_Generalitat_20250228.csv";
+//    private static final String PIPELINES_PATH = "C:\\Users\\user\\Desktop\\cost-efficient-deplyment\\src\\main\\resources\\TELCO_FIBRAPIU_CANALITZA_V.csv";
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(DataProcessUtil.class);
 
-    public static Map<PipelineDTO, List<NodeDTO>> processEmptyPipelineDataset() {
-
+    public static Map<PipelineDTO, List<NodeDTO>> processPipelineDataset(String filePath, String pattern, boolean underConstruct) {
+        log.info("File path in util class: {}", filePath);
         Map<PipelineDTO, List<NodeDTO>> map = new ConcurrentHashMap<>();
-        //List<PipelineDTO> pipelineDTOS = Collections.synchronizedList(new ArrayList<>());
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-        try (CSVReader reader = new CSVReader(new FileReader(EMPTY_PIPELINES_PATH))) {
+        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
             String[] nextLine;
             List<String[]> rows = new ArrayList<>();
             int lineCounter = 0;
-            while ((nextLine = reader.readNext()) != null && lineCounter < 100) {
+            while ((nextLine = reader.readNext()) != null && lineCounter < 50) {
                 rows.add(nextLine);
                 lineCounter++;
             }
@@ -45,23 +44,28 @@ public class DataProcessUtil {
                     List<NodeDTO> nodeDTOS = new ArrayList<>();
                     String multilineString = row[0];
                     String totalLength = row[5];
-                    Pattern pattern = Pattern.compile("\\(\\((.*?)\\)\\)");
-                    Matcher matcher = pattern.matcher(multilineString);
+                    Pattern p = Pattern.compile(pattern);
+                    Matcher matcher = p.matcher(multilineString);
 
                     if (matcher.find()) {
                         String coordinatesPart = matcher.group(1);
-
+                        log.info("\n\nCoordinates: {}", coordinatesPart);
                         for (String point : coordinatesPart.split(",\\s*")) {
                             point = point.replace("(", "").replace(")", "");
                             String[] coords = point.split("\\s+");
-                            double longitude = Double.parseDouble(coords[0].trim());
-                            double latitude = Double.parseDouble(coords[1].trim());
-                            nodeDTOS.add(new NodeDTO(latitude, longitude));
+                            try {
+                                double longitude = Double.parseDouble(coords[0].trim());
+                                double latitude = Double.parseDouble(coords[1].trim());
+                                nodeDTOS.add(new NodeDTO(latitude, longitude));
+                            } catch (NumberFormatException e) {
+                                log.error("Error parsing coordinates: {}", e.getMessage());
+                            }
+
                         }
                     }
 
-                    PipelineDTO pipelineDTO = new PipelineDTO(new ArrayList<>(nodeDTOS), Integer.parseInt(totalLength.trim()), false);
-                    map.put(pipelineDTO, nodeDTOS);
+                    PipelineDTO pipelineDTO = new PipelineDTO(new ArrayList<>(nodeDTOS), Integer.parseInt(totalLength.trim()), underConstruct);
+                    map.putIfAbsent(pipelineDTO, nodeDTOS);
 
                     return null;
                 });
@@ -78,5 +82,4 @@ public class DataProcessUtil {
         }
         return map;
     }
-
 }
