@@ -9,6 +9,7 @@ import com.ced.costefficientdeplyment.util.MapperUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PipelineServiceImpl implements PipelineService {
@@ -23,7 +24,10 @@ public class PipelineServiceImpl implements PipelineService {
 
     @Override
     public List<PipelineDTO> saveEmptyPipelines() {
-        var pipelineDTOS = DataProcessUtil.processEmptyPipelineDataset();
+        var pipelineMap = DataProcessUtil.processEmptyPipelineDataset();
+        List<PipelineDTO> pipelineDTOS = pipelineMap.keySet()
+                .stream()
+                .toList();
         return pipelineDTOS.stream()
                 .map(pipelineDTO -> {
                     Pipeline entity = mapperUtil.convert(pipelineDTO, new Pipeline());

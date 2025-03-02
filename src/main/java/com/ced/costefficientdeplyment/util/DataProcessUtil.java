@@ -2,6 +2,8 @@ package com.ced.costefficientdeplyment.util;
 
 import com.ced.costefficientdeplyment.dto.NodeDTO;
 import com.ced.costefficientdeplyment.dto.PipelineDTO;
+import com.ced.costefficientdeplyment.entity.Node;
+import com.ced.costefficientdeplyment.entity.Pipeline;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -13,6 +15,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
@@ -25,9 +28,10 @@ public class DataProcessUtil {
     private static final String PIPELINES_PATH = "C:\\Users\\user\\Desktop\\cost-efficient-deplyment\\src\\main\\resources\\TELCO_FIBRAPIU_CANALITZA_V.csv";
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(DataProcessUtil.class);
 
-    public static List<PipelineDTO> processEmptyPipelineDataset() {
+    public static Map<PipelineDTO, List<NodeDTO>> processEmptyPipelineDataset() {
 
-        List<PipelineDTO> pipelineDTOS = Collections.synchronizedList(new ArrayList<>());
+        Map<PipelineDTO, List<NodeDTO>> map = new ConcurrentHashMap<>();
+        //List<PipelineDTO> pipelineDTOS = Collections.synchronizedList(new ArrayList<>());
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
         try (CSVReader reader = new CSVReader(new FileReader(EMPTY_PIPELINES_PATH))) {
@@ -61,7 +65,7 @@ public class DataProcessUtil {
                     }
 
                     PipelineDTO pipelineDTO = new PipelineDTO(new ArrayList<>(nodeDTOS), Integer.parseInt(totalLength.trim()), false);
-                    pipelineDTOS.add(pipelineDTO);
+                    map.put(pipelineDTO, nodeDTOS);
 
                     return null;
                 });
@@ -76,7 +80,7 @@ public class DataProcessUtil {
         } finally {
             executorService.shutdown();
         }
-        return pipelineDTOS;
+        return map;
     }
 
     public void savePipelinesAsJson(List<PipelineDTO> pipelineDTOS) throws IOException {
