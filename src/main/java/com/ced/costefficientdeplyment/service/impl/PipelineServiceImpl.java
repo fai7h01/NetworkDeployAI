@@ -46,7 +46,6 @@ public class PipelineServiceImpl implements PipelineService {
                     Pipeline saved = pipelineRepository.save(entity);
                     return mapperUtil.convert(saved, new PipelineDTO());
                 })
-                .sorted(Comparator.comparing(PipelineDTO::getId))
                 .toList();
     }
 

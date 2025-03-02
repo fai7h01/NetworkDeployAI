@@ -37,7 +37,7 @@ public class DataProcessUtil {
             List<String[]> rows = new ArrayList<>();
             int lineCounter = 0;
 
-            while ((nextLine = csvReader.readNext()) != null && lineCounter < 50) {
+            while ((nextLine = csvReader.readNext()) != null && lineCounter < 100) {
                 rows.add(nextLine);
                 lineCounter++;
             }
@@ -69,7 +69,7 @@ public class DataProcessUtil {
                         }
                     }
 
-                    nodeDTOS.sort(Comparator.comparing(NodeDTO::getLatitude));
+                    Collections.rotate(nodeDTOS, 50);
                     PipelineDTO pipelineDTO = new PipelineDTO(new ArrayList<>(nodeDTOS), Integer.parseInt(totalLength.trim()), underConstruct);
                     map.putIfAbsent(pipelineDTO, nodeDTOS);
 
