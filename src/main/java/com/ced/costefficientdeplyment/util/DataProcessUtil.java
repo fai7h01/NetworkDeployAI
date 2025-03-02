@@ -2,15 +2,11 @@ package com.ced.costefficientdeplyment.util;
 
 import com.ced.costefficientdeplyment.dto.NodeDTO;
 import com.ced.costefficientdeplyment.dto.PipelineDTO;
-import com.ced.costefficientdeplyment.entity.Node;
-import com.ced.costefficientdeplyment.entity.Pipeline;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -81,11 +77,6 @@ public class DataProcessUtil {
             executorService.shutdown();
         }
         return map;
-    }
-
-    public void savePipelinesAsJson(List<PipelineDTO> pipelineDTOS) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(new File("pipelines.json"), pipelineDTOS);
     }
 
 }
