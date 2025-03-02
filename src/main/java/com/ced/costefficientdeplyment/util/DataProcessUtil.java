@@ -1,7 +1,7 @@
 package com.ced.costefficientdeplyment.util;
 
-import com.ced.costefficientdeplyment.dto.Node;
-import com.ced.costefficientdeplyment.dto.Pipeline;
+import com.ced.costefficientdeplyment.dto.NodeDTO;
+import com.ced.costefficientdeplyment.dto.PipelineDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -25,9 +25,9 @@ public class DataProcessUtil {
     private static final String PIPELINES_PATH = "C:\\Users\\user\\Desktop\\cost-efficient-deplyment\\src\\main\\resources\\TELCO_FIBRAPIU_CANALITZA_V.csv";
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(DataProcessUtil.class);
 
-    public List<Pipeline> processEmptyPipelineDataset() {
+    public static List<PipelineDTO> processEmptyPipelineDataset() {
 
-        List<Pipeline> pipelines = Collections.synchronizedList(new ArrayList<>());
+        List<PipelineDTO> pipelineDTOS = Collections.synchronizedList(new ArrayList<>());
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
         try (CSVReader reader = new CSVReader(new FileReader(EMPTY_PIPELINES_PATH))) {
@@ -42,7 +42,7 @@ public class DataProcessUtil {
             List<Callable<Void>> tasks = new ArrayList<>();
             for (String[] row : rows) {
                 tasks.add(() -> {
-                    Set<Node> nodes = new HashSet<>();
+                    List<NodeDTO> nodeDTOS = new ArrayList<>();
                     String multilineString = row[0];
                     String totalLength = row[5];
                     Pattern pattern = Pattern.compile("\\(\\((.*?)\\)\\)");
@@ -56,12 +56,12 @@ public class DataProcessUtil {
                             String[] coords = point.split("\\s+");
                             double longitude = Double.parseDouble(coords[0].trim());
                             double latitude = Double.parseDouble(coords[1].trim());
-                            nodes.add(new Node(latitude, longitude));
+                            nodeDTOS.add(new NodeDTO(latitude, longitude));
                         }
                     }
 
-                    Pipeline pipeline = new Pipeline(new ArrayList<>(nodes), Integer.parseInt(totalLength.trim()), false);
-                    pipelines.add(pipeline);
+                    PipelineDTO pipelineDTO = new PipelineDTO(new ArrayList<>(nodeDTOS), Integer.parseInt(totalLength.trim()), false);
+                    pipelineDTOS.add(pipelineDTO);
 
                     return null;
                 });
@@ -76,12 +76,12 @@ public class DataProcessUtil {
         } finally {
             executorService.shutdown();
         }
-        return pipelines;
+        return pipelineDTOS;
     }
 
-    public void savePipelinesAsJson(List<Pipeline> pipelines) throws IOException {
+    public void savePipelinesAsJson(List<PipelineDTO> pipelineDTOS) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(new File("pipelines.json"), pipelines);
+        objectMapper.writeValue(new File("pipelines.json"), pipelineDTOS);
     }
 
 }
