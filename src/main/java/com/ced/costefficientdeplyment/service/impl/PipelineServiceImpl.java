@@ -18,10 +18,12 @@ public class PipelineServiceImpl implements PipelineService {
 
     private final PipelineRepository pipelineRepository;
     private final MapperUtil mapperUtil;
+    private final NodeRepository nodeRepository;
 
-    public PipelineServiceImpl(PipelineRepository pipelineRepository, @Lazy MapperUtil mapperUtil) {
+    public PipelineServiceImpl(PipelineRepository pipelineRepository, @Lazy MapperUtil mapperUtil, NodeRepository nodeRepository) {
         this.pipelineRepository = pipelineRepository;
         this.mapperUtil = mapperUtil;
+        this.nodeRepository = nodeRepository;
     }
 
     @Override
@@ -31,7 +33,6 @@ public class PipelineServiceImpl implements PipelineService {
                 .stream()
                 .toList();
         return pipelineDTOS.stream()
-//                .peek(pipelineDTO -> System.out.println(pipelineDTO.getNodes()))
                 .map(pipelineDTO -> {
                     Pipeline entity = mapperUtil.convert(pipelineDTO, new Pipeline());
                     List<Node> nodes = pipelineDTO.getNodes().stream().map(nodeDTO -> {
@@ -41,7 +42,6 @@ public class PipelineServiceImpl implements PipelineService {
                     }).toList();
                     entity.setNodes(nodes);
                     Pipeline saved = pipelineRepository.save(entity);
-                    boolean empty = saved.getNodes().isEmpty();
                     return mapperUtil.convert(saved, new PipelineDTO());
                 })
                 .toList();
@@ -55,4 +55,11 @@ public class PipelineServiceImpl implements PipelineService {
                 .map(pipeline -> mapperUtil.convert(pipeline, new PipelineDTO()))
                 .toList();
     }
+
+    @Override
+    public PipelineDTO findById(Long id) {
+        Pipeline pipeline = pipelineRepository.findById(id).orElseThrow();
+        return mapperUtil.convert(pipeline, new PipelineDTO());
+    }
+
 }

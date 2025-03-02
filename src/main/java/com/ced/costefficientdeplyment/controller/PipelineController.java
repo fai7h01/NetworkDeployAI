@@ -4,10 +4,7 @@ import com.ced.costefficientdeplyment.dto.PipelineDTO;
 import com.ced.costefficientdeplyment.dto.ResponseWrapper;
 import com.ced.costefficientdeplyment.service.PipelineService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,6 +28,11 @@ public class PipelineController {
                 .data(pipelineDTOS).build());
     }
 
-
+    @GetMapping("{id}")
+    public ResponseEntity<ResponseWrapper> getById(@PathVariable("id") Long id) {
+        PipelineDTO pipeline = pipelineService.findById(id);
+        return ok(ResponseWrapper.builder()
+                .data(pipeline).build());
+    }
 
 }

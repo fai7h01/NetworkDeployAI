@@ -18,34 +18,90 @@ public class ChatConfig {
     public ChatClient chatClient(ChatClient.Builder builder, VectorStore vectorStore, ChatMemory chatMemory) {
         return builder
                 .defaultSystem("""
-                        "I need a structured feasibility analysis for a networking pipelineDTO deployment project in [address].
+                        "I need a structured feasibility analysis for a networking pipeline deployment project in the address provided in the user prompt.
                          
-                         There is an existing pipelineDTO that is [existing_pipeline_length] in length and an unused pipelineDTO (canalization) [distance_between_existing_and_empty_pipeline] away, with a length of [empty_pipeline_length]. Main goal of analysis is that it must compare what will be cost difference when deploying network from scratch and when deployment it though empty pipelineDTOS (canazilations).
+                         There is an existing pipeline provided in the user prompt and an unused pipeline (canalization) provided away in the prompt, each with its own length. The main goal is to compare the cost difference when deploying the network from scratch versus deploying it through empty pipelines (canalizations).
                          
-                         The analysis should be specific to only networking pipelineDTOS and should be detailed, location-specific, and include full source links where applicable, for example ‘ subtopic ‘- full link for example (www.example.com).
+                         The analysis should be specific to networking pipelines and must be detailed, location-specific, and include full source links (always providing the complete URL including the protocol, e.g., https://www.example.com) where applicable.
+                         
+                         **Important:**
+                         - Consider the entire chat history, including any follow-up questions, and integrate additional details or clarifications provided by the user during the conversation.
+                         - If the user asks follow-up questions (e.g., "how can it improve connectivity?"), provide a comprehensive response addressing those queries while complementing the original feasibility analysis.
                          
                          The report should be structured as follows:
                          
-                         1. Cost Optimization Analysis (Must be displayed in a table, always use estimated numbers). Also always build table based on this information: [Cost Component: Matirials, Labor, Permitting, Excavation and restoration, total. New Deployment in euro, Using existing canalization in euro, cost reductions in euro, cost reduction in percentage, time reduction in percentage]
+                         1. **Cost Optimization Analysis**
+                            - Provide a breakdown of construction and operational costs (materials, labor, permitting, logistics, etc.). \s
+                            - Compare the cost-saving benefits of connecting to an existing canalization versus new trenching and installation. \s
+                            - Estimate projected savings (excavation, labor, installation time) and provide an estimated implementation timeframe. \s
+                            - **Data Presentation:** Return the cost and time-related data as a JSON object only (in a code block). The JSON must have the following structure (and no extra text):
+                             json
+                                costData: 
+                                    "component": "Materials",
+                                    "newDeployment": <number>,
+                                    "existingCanalization": <number>,
+                                    "costReduction": <number>,
+                                    "costReductionPercent": <number>,
+                                    "timeReduction": <number>
+                                  
+                                    "component": "Labor",
+                                    "newDeployment": <number>,
+                                    "existingCanalization": <number>,
+                                    "costReduction": <number>,
+                                    "costReductionPercent": <number>,
+                                    "timeReduction": <number>
+                                  
+                                    "component": "Permitting",
+                                    "newDeployment": <number>,
+                                    "existingCanalization": <number>,
+                                    "costReduction": <number>,
+                                    "costReductionPercent": <number>,
+                                    "timeReduction": <number>
+                                  
+                                    "component": "Excavation and Restoration",
+                                    "newDeployment": <number>,
+                                    "existingCanalization": <number>,
+                                    "costReduction": <number>,
+                                    "costReductionPercent": <number>,
+                                    "timeReduction": <number>
+                                  
+                                "totals": 
+                                  "newDeployment": <number>,
+                                  "existingCanalization": <number>,
+                                  "costReduction": <number>,
+                                  "costReductionPercent": <number>,
+                                  "timeReduction": <number>
+                                  
+                                "regulatoryLinks": 
+                                  
+                                    "id": 1,
+                                    "title": "Title of regulation 1",
+                                    "link": "https://www.example.com"
+                                    
+                                    "id": 2,
+                                    "title": "Title of regulation 2",
+                                    "link": "https://www.example.com"
+
+                                    "id": 3,
+                                    "title": "Title of regulation 3",
+                                    "link": "https://www.example.com"
+                                    
+                         2. **Regional Connectivity Improvements**
+                            - Identify businesses or industries within a 7000-meter radius of the provided address that will benefit from improved connectivity.
+                            - Explain how the network ensures long-term scalability and list local infrastructure that could facilitate deployment.
                          
-                         Construction & Operational Costs: Provide a breakdown of costs, including materials, labor, permitting, and logistics expenses .
-                         Cost-Saving Benefits of Connecting to Existing Canalization: Compare the costs of new trenching and installation versus using the existing infrastructure.
-                         Projected Savings: Estimate savings in terms of excavation, labor, and installation time by leveraging the unused pipelineDTO.
-                         Implementation Timeframe: Provide an estimate of how much faster the project can be completed using the existing empty pipelineDTO.
-                         Data Presentation: Show cost and time-related data in a detailed table for clarity.
-                         2. Regional Connectivity Improvements
-                          Identify businesses or industries that will benefit from the improved connectivity based on  the address  provided by the user the radius of 7000 meters . Identify how it will ensure long-terms scalability. Identify local infrastructure that could facilitate this deployment.
-                         3. Regulatory Compliance & Environmental Considerations
-                         Provide full applicable regulations in address provided by the user. Identify potential risks and still prevention strategies. List relevant authorities, required permits and full details for local regulatory bodies in address provided by the user. You must provide officials resources and references for each regulation and compliance in this format – www.example.com, so don’t put text as a link, this is very important!
-                         4. Infrastructure Installation Strategy
-                         Installation Approach: Explain trenching, welding, hydrostatic testing, and other essential construction techniques. Assess technical viability, challenges, and necessary adaptations to ensure successful implementation.
-                         The analysis must be clear, precise, and actionable, with realistic financial and technical estimates. Ensure all data is specific to networking pipelineDTOS."
+                         3. **Regulatory Compliance & Environmental Considerations**
+                            - List all applicable regulations for the address, including potential risks and prevention strategies.
+                            - Provide at least three regulatory links (with full URLs) for local regulatory bodies or official resources.
                          
+                         4. **Infrastructure Installation Strategy**
+                            - Explain the installation approach (trenching, welding, hydrostatic testing, etc.), assess technical viability, and discuss necessary adaptations.
+                         
+                         Ensure the analysis is clear, precise, and actionable with realistic financial and technical estimates, and that all data is specific to networking pipelines.
                         """)
                 .defaultAdvisors(
                         new MessageChatMemoryAdvisor(chatMemory),
-                        new PromptChatMemoryAdvisor(chatMemory),
-                        new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder().topK(3).similarityThreshold(0.75).build())
+                        new PromptChatMemoryAdvisor(chatMemory)
                 )
                 .build();
     }

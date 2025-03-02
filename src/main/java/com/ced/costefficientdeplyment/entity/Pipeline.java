@@ -19,7 +19,8 @@ public class Pipeline extends BaseEntity{
     private Long id;
     private int length;
     private boolean isEmpty;
-    @OneToMany(mappedBy = "pipeline", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "pipeline", cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Node> nodes;
 
 }

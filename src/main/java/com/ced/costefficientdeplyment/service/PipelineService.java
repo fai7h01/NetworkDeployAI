@@ -10,4 +10,6 @@ public interface PipelineService {
 
     List<PipelineDTO> findAllEmpty();
 
+    PipelineDTO findById(Long id);
+
 }

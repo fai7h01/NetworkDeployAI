@@ -1,5 +1,6 @@
 package com.ced.costefficientdeplyment.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 @Getter
@@ -12,12 +13,11 @@ public class NodeDTO {
     private Long id;
     private Double latitude;
     private Double longitude;
+    @JsonIgnore
     private PipelineDTO pipeline;
 
-    public NodeDTO(double latitude, double longitude) {
+    public NodeDTO(Double latitude, Double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
-
-
 }
