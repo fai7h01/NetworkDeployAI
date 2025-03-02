@@ -1,15 +1,56 @@
-PipelineDeployAI is an AI-powered decision support tool designed to optimize the deployment of next-generation telecom networks using existing pipeline sections (canalitzacions) managed by the Generalitat of Catalonia.
-The platform allows third-party telecom operators to repurpose these pre-dug pipelines, reducing construction time and costs while navigating regulatory hurdles.
+# 🚀 NetworkDeployAI
 
-The tool integrates open-source pipeline data with supplementary information such as geospatial data (urban maps, zoning, population density), 
-regulatory details (permit processes, policy guidelines), and technical data (network assets, vendor contracts). This data is used to create a dynamic digital twin of the existing infrastructure, 
-simulating various deployment scenarios to assess pipeline capacity, network performance, and future scalability.
+**AI-powered decision support tool for optimizing telecom network deployments in Catalonia**
 
-Machine learning is employed to evaluate the suitability of pipeline sections for different network technologies (e.g., fiber-optic, 5G). Predictive models help forecast business impacts such as cost efficiency, ROI, and service resilience, 
-while also recommending the best pipeline sections for network upgrades.
+## 📌 Overview
 
-A key feature of PipelineDeployAI is automated regulatory compliance. The platform decodes local regulations to generate tailored permit checklists, approval timelines, and vendor recommendations, 
-making it easier for operators to comply with the approval process. It also analyzes past vendor data to propose cost-effective procurement strategies.
+**NetworkDeployAI** helps telecom operators efficiently deploy next-generation networks by repurposing **existing pipeline infrastructure**. Using **open-source data, machine learning, and geospatial analysis**, it provides cost-effective deployment recommendations while ensuring regulatory compliance. The tool visualizes **pipeline capacity, network performance, and future scalability**, allowing operators to make data-driven decisions and streamline approvals.
 
-The user-friendly web-based interface, built with tools like Next.js, allows operators to input project parameters and receive detailed blueprints with cost estimates, permit requirements, and performance predictions. 
-By streamlining network design, regulatory compliance, and procurement, PipelineDeployAI helps improve the efficiency of network deployments and enhances connectivity for public services
+🌍 **How It Works:**
+
+- **Data Integration:** Combines **open-source pipeline data** with **Google API, regulatory policies, zoning, and technical information**.
+- **AI-Powered Insights:** Uses **Spring AI & OpenAI API** to analyze pipeline suitability for fiber-optic and 5G deployments.
+- **Dynamic Visualization:** Displays geospatial insights using **Google Maps API** and predictive models.
+- **Automated Compliance:** Generates tailored permit checklists and vendor recommendations.
+
+🎯 **Tech Stack:**
+
+- **Frontend:** Next.js, Google API, OpenAI API
+- **Backend:** Java, Spring Boot, Spring AI, PGVector
+- **Data Processing:** Open-source datasets + trained models for real-time analysis
+
+🔗 **[Live Demo](https://pipeline-deploy-ai.vercel.app/)** | 🛠 **[Backend Repo](https://github.com/fai7h01/NetworkDeployAI)**
+
+## 📖 Table of Contents
+
+- [🚀 Features](#-features)
+- [🛠 Usage](#-usage)
+- [📡 Architecture](#-architecture)
+- [📊 Data Processing](#-data-processing)
+
+---
+
+## 🚀 Features
+
+✅ AI-powered **network deployment planning**  
+✅ **Geospatial visualization** for pipeline selection  
+✅ **Predictive cost analysis & ROI forecasting**  
+✅ **Automated regulatory compliance** & vendor insights  
+✅ **Real-time permit approval tracking**
+
+---
+
+## 🛠 Usage
+
+1. **Enter network parameters** in the web interface.
+2. The AI model **analyzes pipeline data & regulations**.
+3. Results **visualized on a map** with deployment recommendations.
+4. Download **cost estimates, compliance checklists, & deployment plans**.
+
+---
+
+## 📡 Architecture
+
+```plaintext
+📊 Open Data  →  📡 AI Model  →  🌍 Google Maps API  →  📈 UI Visualization
+```
