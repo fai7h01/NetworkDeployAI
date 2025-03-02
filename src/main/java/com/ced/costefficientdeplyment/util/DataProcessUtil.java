@@ -9,7 +9,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,8 +20,6 @@ import java.util.regex.Pattern;
 @Component
 public class DataProcessUtil {
 
-//    private static final String EMPTY_PIPELINES_PATH = "C:\\Users\\user\\Desktop\\cost-efficient-deplyment\\src\\main\\resources\\Canalitzacions_de_xarxes_de_telecomunicacions_de_la_Generalitat_20250228.csv";
-//    private static final String PIPELINES_PATH = "C:\\Users\\user\\Desktop\\cost-efficient-deplyment\\src\\main\\resources\\TELCO_FIBRAPIU_CANALITZA_V.csv";
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(DataProcessUtil.class);
 
     public static Map<PipelineDTO, List<NodeDTO>> processPipelineDataset(String filePath, String pattern, boolean underConstruct) {

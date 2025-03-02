@@ -25,13 +25,10 @@ public class CostEfficientDeploymentApplication {
         SpringApplication.run(CostEfficientDeploymentApplication.class, args);
     }
 
-    //private static final String EMPTY_PIPELINES_PATH = "C:\\Users\\user\\Desktop\\cost-efficient-deplyment\\src\\main\\resources\\Canalitzacions_de_xarxes_de_telecomunicacions_de_la_Generalitat_20250228.csv";
-    //private static final String NON_EMPTY_PIPELINES_PATH = "C:\\Users\\user\\Desktop\\cost-efficient-deplyment\\src\\main\\resources\\part2.csv";
-
     @Value("${file.path.empty}")
-    private String path1;
+    private String emptyPipesPath;
     @Value("${file.path.non-empty}")
-    private String path2;
+    private String nonEmptyPipesPath;
 
     private static final String SIMPLE_PATTERN = "\\(\\((.*?)\\)\\)";
 
@@ -40,8 +37,8 @@ public class CostEfficientDeploymentApplication {
     @Bean
     public CommandLineRunner commandLineRunner() {
         return args -> {
-            pipelineService.savePipelines(path2, SIMPLE_PATTERN, true);
-            pipelineService.savePipelines(path1, SIMPLE_PATTERN, false);
+            pipelineService.savePipelines(nonEmptyPipesPath, SIMPLE_PATTERN, false);
+            pipelineService.savePipelines(emptyPipesPath, SIMPLE_PATTERN, true);
         };
     }
 

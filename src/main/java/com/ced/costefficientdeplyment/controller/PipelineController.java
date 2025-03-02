@@ -25,24 +25,24 @@ public class PipelineController {
     @GetMapping(value = "/empty", produces = "application/json")
     public ResponseEntity<ResponseWrapper> getEmptyPipelines() {
         List<PipelineDTO> pipelineDTOS = pipelineService.findAllEmpty();
-
-        return status(HttpStatus.OK)
-                .header("ngrok-skip-browser-warning", "69420")
-                .body(ResponseWrapper.builder().data(pipelineDTOS).build());
+        return status(HttpStatus.OK).body(ResponseWrapper.builder()
+                .success(true)
+                .data(pipelineDTOS).build());
     }
 
     @GetMapping(value = "/non-empty", produces = "application/json")
     public ResponseEntity<ResponseWrapper> getNonEmpty() {
         List<PipelineDTO> pipelineDTOS = pipelineService.findAllNonEmpty();
-        return status(HttpStatus.OK)
-                .header("ngrok-skip-browser-warning", "69420")
-                .body(ResponseWrapper.builder().data(pipelineDTOS).build());
+        return status(HttpStatus.OK).body(ResponseWrapper.builder()
+                .success(true)
+                .data(pipelineDTOS).build());
     }
 
     @GetMapping("{id}")
     public ResponseEntity<ResponseWrapper> getById(@PathVariable("id") Long id) {
         PipelineDTO pipeline = pipelineService.findById(id);
         return ok(ResponseWrapper.builder()
+                .success(true)
                 .data(pipeline).build());
     }
 
