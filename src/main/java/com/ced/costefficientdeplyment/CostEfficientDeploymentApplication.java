@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Profile;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Profile("dev")
+@Profile("prod")
 @SpringBootApplication
 public class CostEfficientDeploymentApplication {
 
