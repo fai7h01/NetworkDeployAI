@@ -2,18 +2,18 @@ package com.ced.costefficientdeplyment.dto;
 
 import java.util.Objects;
 
-public class Node {
+public class NodeDTO {
 
-    private long id;
+    private Long id;
     private double latitude;
     private double longitude;
 
-    public Node(double latitude, double longitude) {
+    public NodeDTO(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public Node(long id, double latitude, double longitude) {
+    public NodeDTO(long id, double latitude, double longitude) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -56,8 +56,8 @@ public class Node {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        Node node = (Node) object;
-        return id == node.id && Double.compare(latitude, node.latitude) == 0 && Double.compare(longitude, node.longitude) == 0;
+        NodeDTO nodeDTO = (NodeDTO) object;
+        return id == nodeDTO.id && Double.compare(latitude, nodeDTO.latitude) == 0 && Double.compare(longitude, nodeDTO.longitude) == 0;
     }
 
     @Override
