@@ -5,15 +5,16 @@ import com.ced.costefficientdeplyment.dto.PipelineDTO;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,14 +30,22 @@ public class DataProcessUtil {
         Map<PipelineDTO, List<NodeDTO>> map = new ConcurrentHashMap<>();
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+        try {
+            Resource resource = new ClassPathResource(filePath);
+            InputStream inputStream = resource.getInputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            CSVReader csvReader = new CSVReader(inputStreamReader);
+
             String[] nextLine;
             List<String[]> rows = new ArrayList<>();
             int lineCounter = 0;
-            while ((nextLine = reader.readNext()) != null && lineCounter < 50) {
+
+            while ((nextLine = csvReader.readNext()) != null && lineCounter < 50) {
                 rows.add(nextLine);
                 lineCounter++;
             }
+
+            csvReader.close();
 
             List<Callable<Void>> tasks = new ArrayList<>();
             for (String[] row : rows) {
@@ -60,7 +69,6 @@ public class DataProcessUtil {
                             } catch (NumberFormatException e) {
                                 log.error("Error parsing coordinates: {}", e.getMessage());
                             }
-
                         }
                     }
 
@@ -79,7 +87,15 @@ public class DataProcessUtil {
             throw new RuntimeException(e);
         } finally {
             executorService.shutdown();
+            try {
+                if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
+                    executorService.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                executorService.shutdownNow();
+            }
         }
+
         return map;
     }
 }

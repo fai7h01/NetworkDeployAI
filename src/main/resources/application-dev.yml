@@ -32,5 +32,5 @@ server:
 
 file:
   path:
-    empty: C:\Users\user\Desktop\cost-efficient-deplyment\src\main\resources\Canalitzacions_de_xarxes_de_telecomunicacions_de_la_Generalitat_20250228.csv
-    non-empty: C:\Users\user\Desktop\cost-efficient-deplyment\src\main\resources\part2.csv
+    empty: Canalitzacions_de_xarxes_de_telecomunicacions_de_la_Generalitat_20250228.csv
+    non-empty: part2.csv
