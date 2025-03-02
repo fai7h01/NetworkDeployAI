@@ -1,6 +1,7 @@
 package com.ced.costefficientdeplyment.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class Node extends BaseEntity{
     private Double latitude;
     private Double longitude;
     @ManyToOne
+    @JoinColumn(name = "pipeline_id")
     private Pipeline pipeline;
 
 
@@ -51,5 +53,15 @@ public class Node extends BaseEntity{
     @Override
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "id=" + id +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", pipeline=" + pipeline +
+                '}';
     }
 }

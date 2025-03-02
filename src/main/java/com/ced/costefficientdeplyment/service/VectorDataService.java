@@ -1,6 +1,6 @@
 package com.ced.costefficientdeplyment.service;
 
-public interface DataLoadingService {
+public interface VectorDataService {
 
     void load();
 

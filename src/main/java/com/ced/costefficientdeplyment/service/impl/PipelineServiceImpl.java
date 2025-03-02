@@ -1,15 +1,17 @@
 package com.ced.costefficientdeplyment.service.impl;
 
 import com.ced.costefficientdeplyment.dto.PipelineDTO;
+import com.ced.costefficientdeplyment.entity.Node;
 import com.ced.costefficientdeplyment.entity.Pipeline;
+import com.ced.costefficientdeplyment.repository.NodeRepository;
 import com.ced.costefficientdeplyment.repository.PipelineRepository;
 import com.ced.costefficientdeplyment.service.PipelineService;
 import com.ced.costefficientdeplyment.util.DataProcessUtil;
 import com.ced.costefficientdeplyment.util.MapperUtil;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class PipelineServiceImpl implements PipelineService {
@@ -17,7 +19,7 @@ public class PipelineServiceImpl implements PipelineService {
     private final PipelineRepository pipelineRepository;
     private final MapperUtil mapperUtil;
 
-    public PipelineServiceImpl(PipelineRepository pipelineRepository, MapperUtil mapperUtil) {
+    public PipelineServiceImpl(PipelineRepository pipelineRepository, @Lazy MapperUtil mapperUtil) {
         this.pipelineRepository = pipelineRepository;
         this.mapperUtil = mapperUtil;
     }
@@ -29,18 +31,27 @@ public class PipelineServiceImpl implements PipelineService {
                 .stream()
                 .toList();
         return pipelineDTOS.stream()
+//                .peek(pipelineDTO -> System.out.println(pipelineDTO.getNodes()))
                 .map(pipelineDTO -> {
                     Pipeline entity = mapperUtil.convert(pipelineDTO, new Pipeline());
+                    List<Node> nodes = pipelineDTO.getNodes().stream().map(nodeDTO -> {
+                        Node node = mapperUtil.convert(nodeDTO, new Node());
+                        node.setPipeline(entity);
+                        return node;
+                    }).toList();
+                    entity.setNodes(nodes);
                     Pipeline saved = pipelineRepository.save(entity);
+                    boolean empty = saved.getNodes().isEmpty();
                     return mapperUtil.convert(saved, new PipelineDTO());
                 })
                 .toList();
     }
 
     @Override
-    public List<PipelineDTO> findAll() {
+    public List<PipelineDTO> findAllEmpty() {
         return pipelineRepository.findAll()
                 .stream()
+                .filter(pipeline -> !pipeline.isEmpty())
                 .map(pipeline -> mapperUtil.convert(pipeline, new PipelineDTO()))
                 .toList();
     }

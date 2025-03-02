@@ -1,8 +1,6 @@
 package com.ced.costefficientdeplyment.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,8 +18,8 @@ public class Pipeline extends BaseEntity{
 
     private Long id;
     private int length;
-    private boolean isUnderConstruction;
-    @OneToMany(mappedBy = "pipeline")
-    private List<Node> nodeDTOS;
+    private boolean isEmpty;
+    @OneToMany(mappedBy = "pipeline", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Node> nodes;
 
 }

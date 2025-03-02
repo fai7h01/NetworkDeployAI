@@ -2,29 +2,29 @@ package com.ced.costefficientdeplyment.dto;
 
 public class Edge {
 
-    private Node from;
-    private Node to;
+    private NodeDTO from;
+    private NodeDTO to;
     private double weight;
 
-    public Edge(Node from, Node to, double weight) {
+    public Edge(NodeDTO from, NodeDTO to, double weight) {
         this.from = from;
         this.to = to;
         this.weight = weight;
     }
 
-    public Node getFrom() {
+    public NodeDTO getFrom() {
         return from;
     }
 
-    public void setFrom(Node from) {
+    public void setFrom(NodeDTO from) {
         this.from = from;
     }
 
-    public Node getTo() {
+    public NodeDTO getTo() {
         return to;
     }
 
-    public void setTo(Node to) {
+    public void setTo(NodeDTO to) {
         this.to = to;
     }
 

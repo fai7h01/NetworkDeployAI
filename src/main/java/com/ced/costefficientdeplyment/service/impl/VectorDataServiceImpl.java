@@ -1,6 +1,6 @@
 package com.ced.costefficientdeplyment.service.impl;
 
-import com.ced.costefficientdeplyment.service.DataLoadingService;
+import com.ced.costefficientdeplyment.service.VectorDataService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,14 +17,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
-public class DataLoadingServiceImpl implements DataLoadingService {
+public class VectorDataServiceImpl implements VectorDataService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DataLoadingServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(VectorDataServiceImpl.class);
     private static final int THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
 
     @Value("file:C:/Users/user/Desktop/cost-efficient-deplyment/pipelines.json")
@@ -34,7 +33,7 @@ public class DataLoadingServiceImpl implements DataLoadingService {
     private final ObjectMapper objectMapper;
     private final ExecutorService executorService;
 
-    public DataLoadingServiceImpl(VectorStore vectorStore, ObjectMapper objectMapper, ExecutorService executorService) {
+    public VectorDataServiceImpl(VectorStore vectorStore, ObjectMapper objectMapper, ExecutorService executorService) {
         Assert.notNull(vectorStore, "VectorStore must not be null.");
         this.vectorStore = vectorStore;
         this.objectMapper = objectMapper;

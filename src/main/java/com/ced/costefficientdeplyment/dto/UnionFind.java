@@ -15,28 +15,28 @@ import java.util.Set;
 @AllArgsConstructor
 public class UnionFind {
 
-    private Map<Node, Node> parent;
-    private Map<Node, Integer> rank;
+    private Map<NodeDTO, NodeDTO> parent;
+    private Map<NodeDTO, Integer> rank;
 
-    public UnionFind(Set<Node> nodes) {
+    public UnionFind(Set<NodeDTO> nodeDTOS) {
         parent = new HashMap<>();
         rank = new HashMap<>();
-        for (Node node : nodes) {
-            parent.put(node, node);
-            rank.put(node, 0);
+        for (NodeDTO nodeDTO : nodeDTOS) {
+            parent.put(nodeDTO, nodeDTO);
+            rank.put(nodeDTO, 0);
         }
     }
 
-    public Node find(Node node) {
-        if (!parent.get(node).equals(node)) {
-            parent.put(node, find(parent.get(node)));
+    public NodeDTO find(NodeDTO nodeDTO) {
+        if (!parent.get(nodeDTO).equals(nodeDTO)) {
+            parent.put(nodeDTO, find(parent.get(nodeDTO)));
         }
-        return parent.get(node);
+        return parent.get(nodeDTO);
     }
 
-    public void union(Node a, Node b) {
-        Node rootA = find(a);
-        Node rootB = find(b);
+    public void union(NodeDTO a, NodeDTO b) {
+        NodeDTO rootA = find(a);
+        NodeDTO rootB = find(b);
         if (rootA.equals(rootB)) {
             return;
         }

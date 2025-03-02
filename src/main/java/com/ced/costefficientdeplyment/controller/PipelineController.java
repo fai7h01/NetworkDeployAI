@@ -26,9 +26,11 @@ public class PipelineController {
 
     @GetMapping
     public ResponseEntity<ResponseWrapper> getEmptyPipelines() {
-        List<PipelineDTO> pipelineDTOS = pipelineService.saveEmptyPipelines();
+        List<PipelineDTO> pipelineDTOS = pipelineService.findAllEmpty();
         return ok(ResponseWrapper.builder()
                 .data(pipelineDTOS).build());
     }
+
+
 
 }

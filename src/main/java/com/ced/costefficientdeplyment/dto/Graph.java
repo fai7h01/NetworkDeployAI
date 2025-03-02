@@ -8,35 +8,35 @@ import java.util.*;
 @AllArgsConstructor
 public class Graph {
 
-    private List<Pipeline> pipelines;
-    private Map<Node, List<Edge>> adjacencyList;
+    private List<PipelineDTO> pipelineDTOS;
+    private Map<NodeDTO, List<Edge>> adjacencyList;
 
-    public Graph(List<Pipeline> pipelines) {
-        this.pipelines = pipelines;
+    public Graph(List<PipelineDTO> pipelineDTOS) {
+        this.pipelineDTOS = pipelineDTOS;
         this.adjacencyList = new HashMap<>();
 
     }
 
     public void buildAdjacencyList() {
         // Add zero-cost edges for under-construction pipelines
-        for (Pipeline pipeline : pipelines) {
-            if (pipeline.isUnderConstruction()) {
-                List<Node> nodes = pipeline.getNodes();
-                for (int i = 0; i < nodes.size() - 1; i++) {
-                    Node from = nodes.get(i);
-                    Node to = nodes.get(i + 1);
+        for (PipelineDTO pipelineDTO : pipelineDTOS) {
+            if (pipelineDTO.isUnderConstruction()) {
+                List<NodeDTO> nodeDTOS = pipelineDTO.getNodes();
+                for (int i = 0; i < nodeDTOS.size() - 1; i++) {
+                    NodeDTO from = nodeDTOS.get(i);
+                    NodeDTO to = nodeDTOS.get(i + 1);
                     addEdge(from, to, 0.0);
                     addEdge(to, from, 0.0);
                 }
             }
         }
 
-        Set<Node> allNodes = getAllNodes();
-        List<Node> nodeList = new ArrayList<>(allNodes);
-        for (int i = 0; i < nodeList.size(); i++) {
-            Node from = nodeList.get(i);
-            for (int j = i + 1; j < nodeList.size(); j++) {
-                Node to = nodeList.get(j);
+        Set<NodeDTO> allNodeDTOS = getAllNodes();
+        List<NodeDTO> nodeDTOList = new ArrayList<>(allNodeDTOS);
+        for (int i = 0; i < nodeDTOList.size(); i++) {
+            NodeDTO from = nodeDTOList.get(i);
+            for (int j = i + 1; j < nodeDTOList.size(); j++) {
+                NodeDTO to = nodeDTOList.get(j);
                 if (!areConnectedByZeroCostEdge(from, to)) {
                    double distance = distanceAlongLatitude(from, to);
                     addEdge(from, to, distance);
@@ -46,11 +46,11 @@ public class Graph {
         }
     }
 
-    private void addEdge(Node from, Node to, double weight) {
+    private void addEdge(NodeDTO from, NodeDTO to, double weight) {
         adjacencyList.computeIfAbsent(from, k -> new ArrayList<>()).add(new Edge(from, to, weight));
     }
 
-    private boolean areConnectedByZeroCostEdge(Node a, Node b) {
+    private boolean areConnectedByZeroCostEdge(NodeDTO a, NodeDTO b) {
         List<Edge> edges = adjacencyList.getOrDefault(a, Collections.emptyList());
         for (Edge edge : edges) {
             if (edge.getTo().equals(b) && edge.getWeight() == 0.0) return true;
@@ -59,7 +59,7 @@ public class Graph {
     }
 
     // Function to calculate distance along a parallel of latitude
-    public double distanceAlongLatitude(Node from, Node to) {
+    public double distanceAlongLatitude(NodeDTO from, NodeDTO to) {
         double earthRadius = 6371;
         // Convert latitude and longitude differences to radians
         double latRad = Math.toRadians(from.getLatitude());
@@ -69,30 +69,30 @@ public class Graph {
         return earthRadius * Math.cos(latRad) * deltaLonRad;
     }
 
-    private Set<Node> getAllNodes() {
-        Set<Node> allNodes = new HashSet<>();
-        for (Pipeline pipeline : pipelines) {
-            allNodes.addAll(pipeline.getNodes());
+    private Set<NodeDTO> getAllNodes() {
+        Set<NodeDTO> allNodeDTOS = new HashSet<>();
+        for (PipelineDTO pipelineDTO : pipelineDTOS) {
+            allNodeDTOS.addAll(pipelineDTO.getNodes());
         }
-        return allNodes;
+        return allNodeDTOS;
     }
 
     // Compute MST using Kruskal's Algorithm
     public List<Edge> computeMST() {
         List<Edge> allEdges = new ArrayList<>();
-        for (Node node : adjacencyList.keySet()) {
-            allEdges.addAll(adjacencyList.get(node));
+        for (NodeDTO nodeDTO : adjacencyList.keySet()) {
+            allEdges.addAll(adjacencyList.get(nodeDTO));
         }
         // Sort edges by weight
         allEdges.sort(Comparator.comparingDouble(Edge::getWeight));
 
-        Set<Node> allNodes = getAllNodes();
-        UnionFind uf = new UnionFind(allNodes);
+        Set<NodeDTO> allNodeDTOS = getAllNodes();
+        UnionFind uf = new UnionFind(allNodeDTOS);
         List<Edge> mst = new ArrayList<>();
 
         for (Edge edge : allEdges) {
-            Node from = edge.getFrom();
-            Node to = edge.getTo();
+            NodeDTO from = edge.getFrom();
+            NodeDTO to = edge.getTo();
             if (!uf.find(from).equals(uf.find(to))) {
                 uf.union(from, to);
                 mst.add(edge);
