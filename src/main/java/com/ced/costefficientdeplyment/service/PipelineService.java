@@ -8,5 +8,6 @@ public interface PipelineService {
 
     List<PipelineDTO> saveEmptyPipelines();
 
+    List<PipelineDTO> findAll();
 
 }

@@ -1,13 +1,9 @@
 package com.ced.costefficientdeplyment.dto;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
 @NoArgsConstructor
 public class PipelineDTO {
 
@@ -22,4 +18,35 @@ public class PipelineDTO {
         this.isUnderConstruction = isUnderConstruction;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<NodeDTO> getNodes() {
+        return nodeDTOS;
+    }
+
+    public void setNodeDTOS(List<NodeDTO> nodeDTOS) {
+        this.nodeDTOS = nodeDTOS;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public boolean isUnderConstruction() {
+        return isUnderConstruction;
+    }
+
+    public void setUnderConstruction(boolean underConstruction) {
+        isUnderConstruction = underConstruction;
+    }
 }

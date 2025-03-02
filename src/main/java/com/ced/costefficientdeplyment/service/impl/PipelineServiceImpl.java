@@ -23,13 +23,21 @@ public class PipelineServiceImpl implements PipelineService {
 
     @Override
     public List<PipelineDTO> saveEmptyPipelines() {
-        List<PipelineDTO> pipelineDTOS = DataProcessUtil.processEmptyPipelineDataset();
+        var pipelineDTOS = DataProcessUtil.processEmptyPipelineDataset();
         return pipelineDTOS.stream()
                 .map(pipelineDTO -> {
                     Pipeline entity = mapperUtil.convert(pipelineDTO, new Pipeline());
                     Pipeline saved = pipelineRepository.save(entity);
                     return mapperUtil.convert(saved, new PipelineDTO());
                 })
+                .toList();
+    }
+
+    @Override
+    public List<PipelineDTO> findAll() {
+        return pipelineRepository.findAll()
+                .stream()
+                .map(pipeline -> mapperUtil.convert(pipeline, new PipelineDTO()))
                 .toList();
     }
 }
