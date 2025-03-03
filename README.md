@@ -1,4 +1,4 @@
-# 🚀 NetworkDeployAI
+# 🚀 NetworkDeployAI (LabLab.ai Hackathon)
 
 **AI-powered decision support tool for optimizing telecom network deployments in Catalonia**
 
