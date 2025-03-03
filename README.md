@@ -1,4 +1,4 @@
-# 🚀 NetworkDeployAI (LabLab.ai Hackathon)
+# 🚀 NetworkDeployAI (LabLab.ai Hackathon) https://lablab.ai/event/ai-for-connectivity-hackathon-building-resilient-networks/team-vision/networkdeployai
 
 **AI-powered decision support tool for optimizing telecom network deployments in Catalonia**
 
